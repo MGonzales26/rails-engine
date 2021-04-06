@@ -75,51 +75,44 @@ RSpec.describe "Items API" do
         items = JSON.parse(response.body, symbolize_names: true)
         
         expected = []
-
-        # expect(items).to have_key([:data])
+        
+        expect(items).to be_a(Hash)
+        expect(items).to have_key(:data)
+        expect(items[:data]).to be_an(Array)
         expect(items[:data]).to eq(expected)
       end
     end
   end
 
   describe "One item" do
-    it "returns one item given an id" do
-      merchant_1 = create(:merchant)
-      item_1 = create(:item, merchant: merchant_1)
-
-      get "/api/v1/items/#{item_1.id}"
-
-      expect(response).to be_success
+    describe "happy path" do
+      it "returns one item given an id" do
+        merchant_1 = create(:merchant)
+        item_1 = create(:item, merchant: merchant_1)
   
-      item = JSON.parse(response.body, symbolize_names: true)
-
-      expect(item).to be_a(Hash)
-      expect(item).to have_key(:data)
-      expect(item.count).to eq(1)
-      expect(item[:data]).to be_a(Hash)
-      expect(item[:data]).to have_key(:id)
-      expect(item[:data][:id].to_i).to eq(item_1.id)
-      expect(item[:data]).to have_key(:type)
-      expect(item[:data][:type]).to eq('item')
-      expect(item[:data]).to have_key(:attributes)
-      expect(item[:data][:attributes]).to be_a(Hash)
-      expect(item[:data][:attributes]).to have_key(:name)
-      expect(item[:data][:attributes][:name]).to eq(item_1.name)
-      expect(item[:data][:attributes]).to have_key(:description)
-      expect(item[:data][:attributes][:description]).to eq(item_1.description)
-      expect(item[:data][:attributes]).to have_key(:unit_price)
-      expect(item[:data][:attributes][:unit_price]).to eq(item_1.unit_price)
-    end
-
-    xit "returns no item without an id" do
-      merchant_1 = create(:merchant)
-      item_1 = create(:item, merchant: merchant_1)
-
-      get "/api/v1/items/#{}"
-
-      expect(response).to be_success
+        get "/api/v1/items/#{item_1.id}"
   
-      item = JSON.parse(response.body, symbolize_names: true)
+        expect(response).to be_success
+    
+        item = JSON.parse(response.body, symbolize_names: true)
+  
+        expect(item).to be_a(Hash)
+        expect(item).to have_key(:data)
+        expect(item.count).to eq(1)
+        expect(item[:data]).to be_a(Hash)
+        expect(item[:data]).to have_key(:id)
+        expect(item[:data][:id].to_i).to eq(item_1.id)
+        expect(item[:data]).to have_key(:type)
+        expect(item[:data][:type]).to eq('item')
+        expect(item[:data]).to have_key(:attributes)
+        expect(item[:data][:attributes]).to be_a(Hash)
+        expect(item[:data][:attributes]).to have_key(:name)
+        expect(item[:data][:attributes][:name]).to eq(item_1.name)
+        expect(item[:data][:attributes]).to have_key(:description)
+        expect(item[:data][:attributes][:description]).to eq(item_1.description)
+        expect(item[:data][:attributes]).to have_key(:unit_price)
+        expect(item[:data][:attributes][:unit_price]).to eq(item_1.unit_price)
+      end
     end
   end
 end

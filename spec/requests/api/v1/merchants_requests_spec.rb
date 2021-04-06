@@ -51,6 +51,4 @@ RSpec.describe "Merchants API" do
     expect(merchants[:data][0][:id].to_i).to eq(merchant_6.id)
     expect(merchants[:data][4][:id].to_i).to eq(merchant_10.id)
   end
-  
-  
 end

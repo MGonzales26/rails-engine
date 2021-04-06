@@ -1,10 +1,16 @@
 class Api::V1::ItemsController < ApplicationController
 
   def index
-    render json: ItemSerializer.new(Item.all.paginate(per_page: params[:per_page], page: params[:page]))
+    items = if params[:merchant_id]
+              Merchant.find(params[:merchant_id]).items
+             else
+              Item.paginate(per_page: params[:per_page], page: params[:page])
+             end
+    render json: ItemSerializer.new(items)
   end
 
   def show
-    render json: ItemSerializer.new(Item.find(params[:id]))
+    item = Item.find(params[:id])
+    render json: ItemSerializer.new(item)
   end
 end

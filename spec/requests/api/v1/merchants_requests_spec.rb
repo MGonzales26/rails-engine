@@ -67,7 +67,9 @@ RSpec.describe "Merchants API" do
         
         expected = []
 
-        # expect(merchants).to have_key([:data])
+        expect(merchants).to be_a(Hash)
+        expect(merchants).to have_key(:data)
+        expect(merchants[:data]).to be_an(Array)
         expect(merchants[:data]).to eq(expected)
       end
     end
@@ -118,6 +120,21 @@ RSpec.describe "Merchants API" do
         expect(items[:data][0][:attributes]).to have_key(:description)
         expect(items[:data][0][:attributes]).to have_key(:unit_price)
         expect(items[:data][0][:attributes]).to have_key(:merchant_id)
+      end
+    end
+
+    describe "sad path" do
+      it 'returns an empty array if there are no items for the given merchant' do
+        merchant_1 = create(:merchant)
+
+        get "/api/v1/merchants/#{merchant_1.id}/items"
+        expect(response).to be_success
+        
+        items = JSON.parse(response.body, symbolize_names: true)
+        expected = []
+        expect(items).to be_a(Hash)
+        expect(items).to have_key(:data)
+        expect(items[:data]).to eq(expected)
       end
     end
   end

@@ -7,19 +7,15 @@ RSpec.describe "Merchants API" do
         create_list(:merchant, 50)
     
         get '/api/v1/merchants'
-    
         expect(response).to be_success
     
         merchants = JSON.parse(response.body, symbolize_names: true)
-    
         expect(merchants[:data].count).to eq(20)
     
-        get '/api/v1/merchants?per_page=45'
-    
+        get '/api/v1/merchants?per_page=45' 
         expect(response).to be_success
     
         merchants = JSON.parse(response.body, symbolize_names: true)
-    
         expect(merchants[:data].count).to eq(45)
       end
     
@@ -98,6 +94,31 @@ RSpec.describe "Merchants API" do
       expect(merchant[:data]).to have_key(:attributes)
       expect(merchant[:data][:attributes]).to be_a(Hash)
       expect(merchant[:data][:attributes]).to have_key(:name)
+    end
+  end
+
+  describe "merchants items" do
+    describe "happy path" do
+      it "returns all the items for a merchant given an id" do
+        merchant_1 = create(:merchant)
+        create_list(:item, 10, merchant: merchant_1)
+
+        get "/api/v1/merchants/#{merchant_1.id}/items"
+        expect(response).to be_success
+
+        items = JSON.parse(response.body, symbolize_names: true)
+
+        expect(items).to be_a(Hash)
+        expect(items).to have_key(:data)
+        expect(items[:data]).to be_an(Array)
+        expect(items[:data].count).to eq(10)
+        expect(items[:data][0]).to have_key(:id)
+        expect(items[:data][0]).to have_key(:attributes)
+        expect(items[:data][0][:attributes]).to have_key(:name)
+        expect(items[:data][0][:attributes]).to have_key(:description)
+        expect(items[:data][0][:attributes]).to have_key(:unit_price)
+        expect(items[:data][0][:attributes]).to have_key(:merchant_id)
+      end
     end
   end
 end

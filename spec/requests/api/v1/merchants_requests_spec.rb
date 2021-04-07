@@ -179,6 +179,25 @@ RSpec.describe "Merchants API" do
         expect(merchant).to have_key(:data)
         expect(merchant[:data]).to be_a(Hash)
       end
+
+      it "finds the first alphabetical merchant regardless of creation time" do
+        turing = create(:merchant, name: "Turing")
+        ring_world = create(:merchant, name: "Ring World")
+
+        get "/api/v1/merchants/find?name=ring"
+        expect(response).to be_successful
+  
+        merchant = JSON.parse(response.body, symbolize_names: true)
+  
+        expect(merchant).to be_a(Hash)
+        expect(merchant).to have_key(:data)
+        expect(merchant[:data]).to be_a(Hash)
+        expect(merchant[:data]).to have_key(:id)
+        expect(merchant[:data][:id].to_i).to eq(ring_world.id)
+        expect(merchant[:data]).to have_key(:attributes)
+        expect(merchant[:data][:attributes]).to have_key(:name)
+        expect(merchant[:data][:attributes][:name]).to eq(ring_world.name)
+      end
     end
 
     describe "sad path" do
@@ -189,7 +208,7 @@ RSpec.describe "Merchants API" do
         expect(response).to be_successful
 
         merchant = JSON.parse(response.body, symbolize_names: true)
-        
+
         expected = {}
         expect(merchant).to be_a(Hash)
         expect(merchant).to have_key(:data)

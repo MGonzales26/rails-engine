@@ -112,7 +112,7 @@ RSpec.describe "Items API" do
     end
   end
 
-  describe "item merchant" do
+  describe "items merchant" do
     describe "happy path" do
       it "the merchant for the item given" do
         merchant_1 = create(:merchant)
@@ -134,6 +134,38 @@ RSpec.describe "Items API" do
         expect(items[:data][:attributes]).to be_a(Hash)
         expect(items[:data][:attributes]).to have_key(:name)
         expect(items[:data][:attributes][:name]).to eq(merchant_1.name)
+      end
+    end
+  end
+
+  describe "item price range" do
+    describe "happy path" do
+      it "returns the items with price at or above minimum parameter" do
+        merchant_1 = create(:merchant)
+        item_1 = create(:item, merchant: merchant_1, unit_price: 10.00)
+        item_2 = create(:item, merchant: merchant_1, unit_price: 8.00)
+        item_3 = create(:item, merchant: merchant_1, unit_price: 5.00)
+        item_4 = create(:item, merchant: merchant_1, unit_price: 3.00)
+
+        get "/api/v1/items/find_all?min_price=5.00"
+        expect(response).to be_successful
+
+        items = JSON.parse(response.body, symbolize_names: true)
+
+        
+        expect(items).to be_a(Hash)
+        expect(items).to have_key(:data)
+        expect(items[:data]).to be_an(Array)
+        expect(items[:data][0]).to be_a(Hash)
+        expect(items[:data][0][:id].to_i).to eq(item_1.id)
+        expect(items[:data][0]).to have_key(:attributes)
+        expect(items[:data][0][:attributes]).to have_key(:unit_price)
+        expect(items[:data][0][:attributes][:unit_price]).to eq(item_1.unit_price)
+        expect(items[:data][2]).to be_a(Hash)
+        expect(items[:data][2][:id].to_i).to eq(item_3.id) 
+        expect(items[:data][2]).to have_key(:attributes)
+        expect(items[:data][2][:attributes]).to have_key(:unit_price)
+        expect(items[:data][2][:attributes][:unit_price]).to eq(item_3.unit_price)
       end
     end
   end

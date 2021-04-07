@@ -13,4 +13,10 @@ class Api::V1::ItemsController < ApplicationController
     item = Item.find(params[:id])
     render json: ItemSerializer.new(item)
   end
+
+  def find_all
+    items = Item.items_within_price_range(params[:min_price])
+    render json: ItemSerializer.new(items)
+    # require 'pry'; binding.pry
+  end
 end

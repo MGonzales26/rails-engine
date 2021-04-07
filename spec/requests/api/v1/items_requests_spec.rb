@@ -266,7 +266,7 @@ RSpec.describe "Items API" do
                       description: 'dull',
                       unit_price: 6}
 
-        patch "/api/v1/items/#{item.id}", params: { item: new_params }
+        put "/api/v1/items/#{item.id}", params: { item: new_params }
         expect(response).to be_successful
 
         result = Item.find(item.id)
@@ -277,6 +277,22 @@ RSpec.describe "Items API" do
         expect(result.description).to_not eq('shiny')
         expect(result.unit_price).to eq(6)
         expect(result.unit_price).to_not eq(5)
+      end
+    end
+  end
+
+  describe "delete item" do
+    describe "happy path" do
+      it "deletes an item" do
+        merchant_1 = create(:merchant)
+        item = create(:item, merchant: merchant_1)
+
+        expect(Item.count).to eq(1)
+
+        delete "/api/v1/items/#{item.id}"
+        expect(response).to be_successful
+
+        expect(Item.count).to eq(0)
       end
     end
   end

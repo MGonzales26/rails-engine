@@ -2,6 +2,7 @@ class Api::V1::ItemsController < ApplicationController
 
   def index
     items = if params[:merchant_id]
+      # require 'pry'; binding.pry
               Merchant.find(params[:merchant_id]).items
              else
               Item.paginate(per_page: params[:per_page], page: params[:page])
@@ -21,14 +22,18 @@ class Api::V1::ItemsController < ApplicationController
 
   def create
     item = Item.create!(item_params)
-    render json: ItemSerializer.new(item)
+    render json: ItemSerializer.new(item), status: :created
   end
-
+  
   def update
     item = Item.update(item_params)
     render json: ItemSerializer.new(item)
   end
-
+  
+  def destroy
+    Item.destroy(params[:id])
+  end
+  
   private
 
   def item_params

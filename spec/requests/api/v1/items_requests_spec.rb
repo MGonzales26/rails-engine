@@ -195,6 +195,36 @@ RSpec.describe "Items API" do
         expect(items[:data][2][:attributes]).to have_key(:unit_price)
         expect(items[:data][2][:attributes][:unit_price]).to eq(item_4.unit_price)
       end
+
+      it "returns the items with price between both min and max parameter" do
+        merchant_1 = create(:merchant)
+        item_1 = create(:item, merchant: merchant_1, unit_price: 15.00)
+        item_2 = create(:item, merchant: merchant_1, unit_price: 10.00)
+        item_3 = create(:item, merchant: merchant_1, unit_price: 8.00)
+        item_1 = create(:item, merchant: merchant_1, unit_price: 5.00)
+        item_5 = create(:item, merchant: merchant_1, unit_price: 3.00)
+        item_6 = create(:item, merchant: merchant_1, unit_price: 1.00)
+
+        get "/api/v1/items/find_all?min_price=3.00&max_price=10.00"
+        expect(response).to be_successful
+
+        items = JSON.parse(response.body, symbolize_names: true)
+
+        
+        expect(items).to be_a(Hash)
+        expect(items).to have_key(:data)
+        expect(items[:data]).to be_an(Array)
+        expect(items[:data][0]).to be_a(Hash)
+        expect(items[:data][0][:id].to_i).to eq(item_2.id)
+        expect(items[:data][0]).to have_key(:attributes)
+        expect(items[:data][0][:attributes]).to have_key(:unit_price)
+        expect(items[:data][0][:attributes][:unit_price]).to eq(item_2.unit_price)
+        expect(items[:data][3]).to be_a(Hash)
+        expect(items[:data][3][:id].to_i).to eq(item_5.id) 
+        expect(items[:data][3]).to have_key(:attributes)
+        expect(items[:data][3][:attributes]).to have_key(:unit_price)
+        expect(items[:data][3][:attributes][:unit_price]).to eq(item_5.unit_price)
+      end
     end
   end
 end

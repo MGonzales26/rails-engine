@@ -2,6 +2,9 @@ class Merchant < ApplicationRecord
   has_many :items
 
   def self.find_merchant_by_name(name)
-    where('name like ?', "%#{name}%").first
+    merchant = where('name ilike ?', "%#{name}%").first
+    if merchant.nil?
+      {}
+    end
   end
 end

@@ -153,4 +153,45 @@ RSpec.describe "Merchants API" do
         expect(merchant).to have_key(:data)
         expect(merchant[:data]).to be_a(Hash)
       end
+
+      it "finds a single merchant from a search query regardless of capitalization" do
+        create(:merchant, name: "Ring World")
+  
+        get "/api/v1/merchants/find?name=ring"
+        expect(response).to be_successful
+  
+        merchant = JSON.parse(response.body, symbolize_names: true)
+  
+        expect(merchant).to be_a(Hash)
+        expect(merchant).to have_key(:data)
+        expect(merchant[:data]).to be_a(Hash)
+      end
+
+      it "finds a single merchant from a search query fragment" do
+        create(:merchant, name: "Ring World")
+  
+        get "/api/v1/merchants/find?name=ri"
+        expect(response).to be_successful
+  
+        merchant = JSON.parse(response.body, symbolize_names: true)
+  
+        expect(merchant).to be_a(Hash)
+        expect(merchant).to have_key(:data)
+        expect(merchant[:data]).to be_a(Hash)
+      end
+    end
+
+    describe "sad path" do
+      it "returns and empty hash if nothing is found" do
+        create(:merchant, name: "Some Name")
+
+        get "/api/v1/merchants/find?name=different"
+        expect(response).to be_successful
+
+        merchant = JSON.parse(response.body, symbolize_names: true)
+
+        # require 'pry'; binding.pry
+      end
+    end
+  end
 end

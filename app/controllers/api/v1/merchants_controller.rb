@@ -13,4 +13,13 @@ class Api::V1::MerchantsController < ApplicationController
                end
     render json: MerchantSerializer.new(merchant)
   end
+
+  def find
+    merchant = Merchant.find_merchant_by_name(params[:name])
+    if merchant.nil?
+      render json: { data: {} }
+    else
+      render json: MerchantSerializer.new(merchant)
+    end
+  end
 end

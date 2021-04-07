@@ -3,8 +3,6 @@ class Merchant < ApplicationRecord
 
   def self.find_merchant_by_name(name)
     merchant = where('name ilike ?', "%#{name}%").first
-    # if merchant.nil?
-    #   {}
-    # end
+
   end
 end

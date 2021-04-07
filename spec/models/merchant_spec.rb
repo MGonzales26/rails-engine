@@ -21,4 +21,23 @@ RSpec.describe Merchant, type: :model do
       end
     end
   end
+
+  describe "class methods" do
+    describe ".find_merchant_by_name" do
+      it "returns the first merchant for the given name regardless of capitalization" do
+        merchant_1 = create(:merchant, name: "Ring World")
+
+        expect(Merchant.find_merchant_by_name("ring")). to eq(merchant_1)
+        expect(Merchant.find_merchant_by_name("rInG")). to eq(merchant_1)
+      end
+
+      it "returns the first merchant alphabetically for the given name" do
+        turing = create(:merchant, name: "Turing")
+        ring_world = create(:merchant, name: "Ring World")
+
+        expect(Merchant.find_merchant_by_name("ring")). to eq(ring_world)        
+        expect(Merchant.find_merchant_by_name("RinG")). to eq(ring_world)        
+      end
+    end
+  end
 end

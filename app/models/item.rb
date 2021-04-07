@@ -4,4 +4,8 @@ class Item < ApplicationRecord
   has_many :invoice_items
   has_many :invoices, through: :invoice_items
 
+  def self.items_within_price_range(min_price)
+    where('unit_price >= ?', min_price)
+    # require 'pry'; binding.pry
+  end
 end

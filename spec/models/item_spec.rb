@@ -24,4 +24,20 @@ RSpec.describe Item, type: :model do
       end
     end
   end
+
+  describe "class methods" do
+    describe ".items_within_price_range" do
+      it "returns all of the items above the minimum threshold" do
+        merchant_1 = create(:merchant)
+        item_1 = create(:item, merchant: merchant_1, unit_price: 10.00)
+        item_2 = create(:item, merchant: merchant_1, unit_price: 8.00)
+        item_3 = create(:item, merchant: merchant_1, unit_price: 5.00)
+        item_4 = create(:item, merchant: merchant_1, unit_price: 3.00)
+
+        expected = [item_1, item_2, item_3]
+
+        expect(Item.items_within_price_range("5.00")).to eq(expected)
+      end
+    end
+  end
 end

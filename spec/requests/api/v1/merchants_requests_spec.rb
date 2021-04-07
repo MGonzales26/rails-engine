@@ -138,4 +138,19 @@ RSpec.describe "Merchants API" do
       end
     end
   end
+
+  describe "find merchant" do
+    describe "happy path" do
+      it "finds a single merchant from a search query" do
+        create(:merchant, name: "Ring World")
+  
+        get "/api/v1/merchants/find?name=Ring"
+        expect(response).to be_successful
+  
+        merchant = JSON.parse(response.body, symbolize_names: true)
+  
+        expect(merchant).to be_a(Hash)
+        expect(merchant).to have_key(:data)
+        expect(merchant[:data]).to be_a(Hash)
+      end
 end

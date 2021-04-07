@@ -227,4 +227,29 @@ RSpec.describe "Items API" do
       end
     end
   end
+
+  describe "create item" do
+    describe "happy path" do
+      it "creates a new item" do
+        merchant_1 = create(:merchant)
+        #it needs a hash with name, description, unit_price, merchant_id
+        params = {
+                  :name => 'widget',
+                  :description => 'does the thing',
+                  :unit_price => 100.00,
+                  :merchant_id => merchant_1.id
+                  }
+  
+        post '/api/v1/items', params: { item: params }
+        expect(response).to be_successful
+
+        item = Item.last
+
+        expect(item.name).to eq(params[:name])
+        expect(item.description).to eq(params[:description])
+        expect(item.unit_price).to eq(params[:unit_price])
+        expect(item.merchant_id).to eq(params[:merchant_id])
+      end
+    end
+  end
 end

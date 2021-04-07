@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       end
 
       get 'items/find_all', to: 'items#find_all'
-      resources :items, only: [:index, :show] do
+      resources :items do
         resource :merchant, only: [:show]
       end
     end

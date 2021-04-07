@@ -252,4 +252,32 @@ RSpec.describe "Items API" do
       end
     end
   end
+
+  describe "update item" do
+    describe "happy path" do
+      it "updates an existing item" do
+        merchant_1 = create(:merchant)
+        item = create(:item, name: 'widget', 
+                             description: 'shiny',
+                             unit_price: 5,
+                             merchant: merchant_1)
+
+        new_params = {name: 'a new widget', 
+                      description: 'dull',
+                      unit_price: 6}
+
+        patch "/api/v1/items/#{item.id}", params: { item: new_params }
+        expect(response).to be_successful
+
+        result = Item.find(item.id)
+
+        expect(result.name).to eq('a new widget')
+        expect(result.name).to_not eq('widget')
+        expect(result.description).to eq('dull')
+        expect(result.description).to_not eq('shiny')
+        expect(result.unit_price).to eq(6)
+        expect(result.unit_price).to_not eq(5)
+      end
+    end
+  end
 end

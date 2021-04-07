@@ -190,7 +190,10 @@ RSpec.describe "Merchants API" do
 
         merchant = JSON.parse(response.body, symbolize_names: true)
 
-        # require 'pry'; binding.pry
+        expected = {}
+        expect(merchant).to be_a(Hash)
+        expect(merchant).to have_key(:data)
+        expect(merchant[:data]).to eq(expected)
       end
     end
   end

@@ -36,7 +36,19 @@ RSpec.describe Item, type: :model do
 
         expected = [item_1, item_2, item_3]
 
-        expect(Item.items_within_price_range("5.00")).to eq(expected)
+        expect(Item.items_within_price_range("5.00", nil)).to eq(expected)
+      end
+
+      it "returns all of the items below the maximum threshold" do
+        merchant_1 = create(:merchant)
+        item_1 = create(:item, merchant: merchant_1, unit_price: 10.00)
+        item_2 = create(:item, merchant: merchant_1, unit_price: 8.00)
+        item_3 = create(:item, merchant: merchant_1, unit_price: 5.00)
+        item_4 = create(:item, merchant: merchant_1, unit_price: 3.00)
+
+        expected = [item_2, item_3, item_4]
+
+        expect(Item.items_within_price_range(nil, "8.00")).to eq(expected)
       end
     end
   end

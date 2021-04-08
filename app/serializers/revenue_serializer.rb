@@ -20,7 +20,7 @@ class RevenueSerializer
       #         attributes: { type: "revenue",
       #           properties: { revenue: revenue}
       # }}}}}
-      require 'pry'; binding.pry
+      # require 'pry'; binding.pry
       { data: { id: nil,
         type: 'revenue',
         attributes: {

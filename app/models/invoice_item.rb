@@ -9,8 +9,9 @@ class InvoiceItem < ApplicationRecord
     .where('invoices.created_at between ? and ?', Date.parse(start_date).beginning_of_day, Date.parse(end_date).end_of_day)
     .revenue
   end
-  
-  def self.revenue
-    sum('quantity * invoice_items.unit_price')
+
+  def self.weekly_revenue
   end
+  
+
 end

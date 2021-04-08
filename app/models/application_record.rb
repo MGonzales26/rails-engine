@@ -6,4 +6,8 @@ class ApplicationRecord < ActiveRecord::Base
     per_page = (per_page || 20).to_i
     limit(per_page).offset((page - 1) * per_page)
   }
+
+  def self.revenue
+    sum('quantity * invoice_items.unit_price')
+  end
 end

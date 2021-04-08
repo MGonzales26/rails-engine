@@ -9,7 +9,7 @@ RSpec.describe "Items API" do
     
         get '/api/v1/items'
         expect(response).to be_success
-    
+        
         items = JSON.parse(response.body, symbolize_names: true)
         expect(items[:data].count).to eq(20)
     

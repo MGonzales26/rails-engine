@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       resources :items do
         resource :merchant, only: [:show]
       end
+
+      get 'revenue', to: 'revenue#date_range_revenue'
     end
   end
 end

@@ -72,30 +72,62 @@ RSpec.describe "Merchants API" do
         expect(merchants[:data]).to be_an(Array)
         expect(merchants[:data]).to eq(expected)
       end
+
+      it "returns an error if the per_page param is negative" do
+        get '/api/v1/merchants?per_page=-1'
+        expect(response.status).to eq(400)
+      
+      end
+
+      it "returns first page if page param is less than 1" do
+        create_list(:merchant, 25)
+
+        get '/api/v1/merchants?page=-6'
+        expect(response).to be_successful
+
+        merchants = JSON.parse(response.body, symbolize_names: true)
+
+        expect(merchants).to be_a(Hash)
+        expect(merchants).to have_key(:data)
+        expect(merchants[:data]).to be_an(Array)
+        expect(merchants[:data].count).to eq(20)
+        expect(merchants[:data].count).to_not eq(5)
+      end
     end
   end
 
   describe "One Merchant" do
-    it "returns one merchant given an id" do
-      merchant_1 = create(:merchant)
-
-      get "/api/v1/merchants/#{merchant_1.id}"
-
-      expect(response).to be_success
+    describe "happy path" do
+      it "returns one merchant given an id" do
+        merchant_1 = create(:merchant)
   
-      merchant = JSON.parse(response.body, symbolize_names: true)
+        get "/api/v1/merchants/#{merchant_1.id}"
+  
+        expect(response).to be_success
+    
+        merchant = JSON.parse(response.body, symbolize_names: true)
+  
+        expect(merchant).to be_a(Hash)
+        expect(merchant).to have_key(:data)
+        expect(merchant.count).to eq(1)
+        expect(merchant[:data]).to be_a(Hash)
+        expect(merchant[:data]).to have_key(:id)
+        expect(merchant[:data][:id].to_i).to eq(merchant_1.id)
+        expect(merchant[:data]).to have_key(:type)
+        expect(merchant[:data][:type]).to eq('merchant')
+        expect(merchant[:data]).to have_key(:attributes)
+        expect(merchant[:data][:attributes]).to be_a(Hash)
+        expect(merchant[:data][:attributes]).to have_key(:name)
+      end
+    end
 
-      expect(merchant).to be_a(Hash)
-      expect(merchant).to have_key(:data)
-      expect(merchant.count).to eq(1)
-      expect(merchant[:data]).to be_a(Hash)
-      expect(merchant[:data]).to have_key(:id)
-      expect(merchant[:data][:id].to_i).to eq(merchant_1.id)
-      expect(merchant[:data]).to have_key(:type)
-      expect(merchant[:data][:type]).to eq('merchant')
-      expect(merchant[:data]).to have_key(:attributes)
-      expect(merchant[:data][:attributes]).to be_a(Hash)
-      expect(merchant[:data][:attributes]).to have_key(:name)
+    describe "sad path" do
+      it "returns a 404 error if no merchant is found" do
+
+      get "/api/v1/merchants/1"
+
+      expect(response.status).to eq(404)
+      end
     end
   end
 

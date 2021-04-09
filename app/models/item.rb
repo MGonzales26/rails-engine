@@ -10,4 +10,8 @@ class Item < ApplicationRecord
   def self.items_within_price_range(min_price, max_price)
     where('unit_price between ? and ?', (min_price || 0) , (max_price || Float::INFINITY))
   end
+
+  def self.find_items_by_name(name)
+    where('name ilike ?', "%#{name}%").order(:name)
+  end
 end

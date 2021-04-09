@@ -162,7 +162,7 @@ RSpec.describe "Items API" do
         item_3 = create(:item, merchant: merchant_1, unit_price: 5.00)
         item_4 = create(:item, merchant: merchant_1, unit_price: 3.00)
 
-        get "/api/v1/items/find_all?min_price=5.00"
+        get "/api/v1/items/all_price_range?min_price=5.00"
         expect(response).to be_successful
 
         items = JSON.parse(response.body, symbolize_names: true)
@@ -190,7 +190,7 @@ RSpec.describe "Items API" do
         item_3 = create(:item, merchant: merchant_1, unit_price: 5.00)
         item_4 = create(:item, merchant: merchant_1, unit_price: 3.00)
 
-        get "/api/v1/items/find_all?max_price=8.00"
+        get "/api/v1/items/all_price_range?max_price=8.00"
         expect(response).to be_successful
 
         items = JSON.parse(response.body, symbolize_names: true)
@@ -220,7 +220,7 @@ RSpec.describe "Items API" do
         item_5 = create(:item, merchant: merchant_1, unit_price: 3.00)
         item_6 = create(:item, merchant: merchant_1, unit_price: 1.00)
 
-        get "/api/v1/items/find_all?min_price=3.00&max_price=10.00"
+        get "/api/v1/items/all_price_range?min_price=3.00&max_price=10.00"
         expect(response).to be_successful
 
         items = JSON.parse(response.body, symbolize_names: true)
@@ -316,7 +316,7 @@ RSpec.describe "Items API" do
           description: 'dull',
           unit_price: 6}
 
-        put "/api/v1/items/100000000000000", params: { item: params }
+        put "/api/v1/items/1", params: { item: params }
 
         expect(response.status).to eq(404)
       end
@@ -360,6 +360,43 @@ RSpec.describe "Items API" do
         delete "/api/v1/items/1"
 
         expect(response.status).to eq(404)
+      end
+    end
+  end
+
+  describe "find items" do
+    describe "happy path" do
+      it "finds all items from a search query" do
+        merchant_1 = create(:merchant)
+        item_1 = create(:item,name: "Ring", merchant: merchant_1)
+        item_2 = create(:item,name: "Turing Shirt", merchant: merchant_1)
+  
+        get "/api/v1/items/find_all?name=Ring"
+        expect(response).to be_successful
+  
+        items = JSON.parse(response.body, symbolize_names: true)
+  
+        expect(items).to be_a(Hash)
+        expect(items).to have_key(:data)
+        expect(items[:data]).to be_an(Array)
+        expect(items[:data][0]).to have_key(:attributes)
+        expect(items[:data][0][:attributes]).to have_key(:name)
+        expect(items[:data][0][:attributes][:name]).to eq(item_1.name)
+        expect(items[:data][1][:attributes][:name]).to eq(item_2.name)
+      end
+    end
+
+    describe "sad path" do
+      it "returns and empty array if nothing is found" do
+        get "/api/v1/items/find_all?name=name"
+        expect(response).to be_success
+
+        merchant = JSON.parse(response.body, symbolize_names: true)
+
+        expected = []
+        expect(merchant).to be_a(Hash)
+        expect(merchant).to have_key(:data)
+        expect(merchant[:data]).to eq(expected)
       end
     end
   end

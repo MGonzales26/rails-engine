@@ -87,5 +87,16 @@ RSpec.describe Item, type: :model do
         expect(Item.items_within_price_range("100000.00", nil)).to eq(expected_4)
       end
     end
+
+    describe ".find_items_by_name" do
+      it "returns an array of items matching the given name" do
+        merchant_1 = create(:merchant)
+        item_1 = create(:item,name: "Ring", merchant: merchant_1)
+        item_2 = create(:item,name: "Turing Shirt", merchant: merchant_1)
+  
+        expected = [item_1, item_2]
+        expect(Item.find_items_by_name("Ring")). to eq(expected)
+      end
+    end
   end
 end

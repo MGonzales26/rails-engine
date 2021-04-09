@@ -19,6 +19,12 @@ RSpec.describe Merchant, type: :model do
         
         expect(Merchant.paginate(page: 2, per_page: 2)).to eq(expected)
       end
+
+      it "returns page 1 if page param is less than 1" do
+        create_list(:merchant, 25)
+
+        expect(Merchant.paginate(page: -1, per_page: nil).count).to eq(20)
+      end
     end
   end
 

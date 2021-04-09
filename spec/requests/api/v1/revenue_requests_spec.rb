@@ -33,6 +33,29 @@ RSpec.describe "revenue api" do
         expect(result[:data][:attributes][:revenue]).to_not eq(5.0)
       end
     end
+
+    describe "sad path" do
+      it "returns an error if there isn't a start or end date or is blank" do
+        merchant_1 = create(:merchant)
+        item_1 = create(:item, merchant: merchant_1)
+        invoice_1 = create(:invoice, merchant: merchant_1, created_at: '2021-04-07',)
+        invoice_2 = create(:invoice, merchant: merchant_1, created_at: '2020-04-07')
+        transaction_1 = create(:transaction, invoice: invoice_1, result: 'success')
+        transaction_2 = create(:transaction, invoice: invoice_2, result: 'success')
+
+        invoice_item_1 = create(:invoice_item, quantity: 1, unit_price: 10, item: item_1, invoice: invoice_1)
+        invoice_item_2 = create(:invoice_item, quantity: 1, unit_price: 5, item: item_1, invoice: invoice_2)
+        
+        get "/api/v1/revenue?&end=2021-04-08"
+        expect(response.status).to eq(400)
+        
+        get "/api/v1/revenue?start=2021-04-01"
+        expect(response.status).to eq(400)
+
+        get "/api/v1/revenue?start=2021-04-01&end="
+        expect(response.status).to eq(400)
+      end
+    end
   end
 
   describe "weekly revenue" do

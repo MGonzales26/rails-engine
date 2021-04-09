@@ -40,7 +40,6 @@ RSpec.describe "Items API" do
     
         items = JSON.parse(response.body, symbolize_names: true)
 
-        # expect(items).to have_key([:data])
         expect(items[:data].count).to eq(8)
     
         get '/api/v1/items?per_page=5&page=2'
@@ -110,6 +109,14 @@ RSpec.describe "Items API" do
         expect(item[:data][:attributes][:unit_price]).to eq(item_1.unit_price)
       end
     end
+
+    describe "sad path" do
+      it "returns an error when item doesn't exist" do
+        get "/api/v1/items/1"
+
+        expect(response.status).to eq(404)
+      end
+    end
   end
 
   describe "items merchant" do
@@ -134,6 +141,14 @@ RSpec.describe "Items API" do
         expect(items[:data][:attributes]).to be_a(Hash)
         expect(items[:data][:attributes]).to have_key(:name)
         expect(items[:data][:attributes][:name]).to eq(merchant_1.name)
+      end
+    end
+
+    describe "sad path" do
+      it "returns an error if there is no item" do
+        get "/api/v1/items/1/merchant"
+    
+        expect(response.status).to eq(404)
       end
     end
   end
@@ -251,6 +266,21 @@ RSpec.describe "Items API" do
         expect(item.merchant_id).to eq(params[:merchant_id])
       end
     end
+
+    describe "sad path" do
+      it "returns an error if an attribue is missing" do
+        merchant_1 = create(:merchant)
+        params = {
+                  :name => 'widget',
+                  :description => 'does the thing',
+                  :merchant_id => merchant_1.id
+                  }
+  
+        post '/api/v1/items', params: { item: params }
+
+        expect(response.status). to eq(400)
+      end
+    end
   end
 
   describe "update item" do
@@ -279,6 +309,35 @@ RSpec.describe "Items API" do
         expect(result.unit_price).to_not eq(5)
       end
     end
+
+    describe "sad path" do
+      it "returns an error if there is no item" do
+        params = {name: 'a new widget', 
+          description: 'dull',
+          unit_price: 6}
+
+        put "/api/v1/items/100000000000000", params: { item: params }
+
+        expect(response.status).to eq(404)
+      end
+
+      it "returns an error if there is no merchant_id" do
+        merchant_1 = create(:merchant)
+        item = create(:item, name: 'widget', 
+                              description: 'shiny',
+                              unit_price: 5,
+                              merchant_id: merchant_1.id )
+
+        new_params = {name: 'a new widget', 
+                      description: 'dull',
+                      unit_price: 6,
+                      merchant_id: 1 }
+
+        put "/api/v1/items/#{item.id}", params: { item: new_params }
+
+        expect(response.status).to eq(400)
+      end
+    end
   end
 
   describe "delete item" do
@@ -293,6 +352,14 @@ RSpec.describe "Items API" do
         expect(response).to be_successful
 
         expect(Item.count).to eq(0)
+      end
+    end
+    
+    describe "sad path" do
+      it "returns an error if the item doesn't exist" do
+        delete "/api/v1/items/1"
+
+        expect(response.status).to eq(404)
       end
     end
   end

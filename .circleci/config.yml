@@ -17,8 +17,11 @@ jobs:
           name: Bundle
           command: bundle install
       - run:
+          name: Database drop
+          command: rails db:drop
+      - run:
           name: Database setup
-          command: bundle exec rails db:{create,migrate}
+          command: rails db:{create,migrate}
   test:
     docker: 
       - image: circleci/ruby:2.5.3

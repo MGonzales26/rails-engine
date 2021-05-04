@@ -21,9 +21,12 @@ jobs:
       - run:
           name: Bundle
           command: bundle install
+      - run: sudo apt install -y postgresql-client || true
       - run:
-          name: Database setup
-          command: bundle exec rails db:schema:load --trace
+          name: Database Setup
+          command: |
+            bundle exec rake db:create
+            bundle exec rake db:structure:load
   test:
     docker: 
       - image: circleci/ruby:2.5.3

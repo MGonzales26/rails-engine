@@ -1,20 +1,27 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@0.1.2 
+  ruby: circleci/ruby@1.1.3 
 
 jobs:
   build:
-    working_directory: ~/rails-engine
     docker:
       - image: circleci/ruby:2.5.3
     steps:
       - checkout
+      - run:
+          name: Bundle update
+          command: bundle update
       - run:
           name: Bundle
           command: bundle install
       - run:
           name: Database setup
           command: bundle exec rails db:{create,migrate}
+  test:
+    docker: 
+      - circleci/ruby:2.5.3
+    steps:
+    - checkout
       - run:
           name: Test Suite
           command: bundle exec rspec

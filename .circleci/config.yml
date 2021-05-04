@@ -8,7 +8,7 @@ jobs:
       - image: circleci/ruby:2.5.3
       - image: circleci/postgres:13.2
         environment:
-          POSTGRES_USER: circleci-demo-ruby
+          POSTGRES_USER: rails-engine
           POSTGRES_DB: rails_engine_test
           POSTGRES_HOST_AUTH_METHOD: trust
     steps:

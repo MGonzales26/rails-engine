@@ -60,7 +60,8 @@ development:
 test:
   <<: *default
   database: rails-engine_test
-  
+  username: rails-engine
+  password: password
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -85,4 +86,6 @@ production:
   <<: *default
   database: rails-engine_production
   username: rails-engine
-  password: <%= ENV['RAILS-ENGINE_DATABASE_PASSWORD'] %>
+  password: password
+
+  # password: <%= ENV['RAILS-ENGINE_DATABASE_PASSWORD'] %>

@@ -13,3 +13,9 @@ jobs:
           name: Which bundler?
           command: bundle -v
       - ruby/bundle-install
+      - ruby/install-deps
+      - run:
+          name: Database setup
+          command: bundle exec rails db:schema:load --trace
+      - bundle exec rspec
+

@@ -4,15 +4,20 @@ orbs:
 
 jobs:
   build:
+    working_directory: ~/rails-engine
     docker:
-      - image: circleci/ruby:2.6.3-stretch-node
-    executor: ruby/default
+      - image: circleci/ruby:2.5.3
+      environment:
+          RAILS_ENV: test
     steps:
       - checkout
-      - ruby/bundle-install
-      - ruby/install-deps
+      - run:
+          name: Bundle
+          command: bundle install
       - run:
           name: Database setup
-          command: bundle exec rails db:schema:load --trace
-      - bundle exec rspec
+          command: bundle exec rails db:{create,migrate}
+      - run:
+          name: Test Suite
+          command: bundle exec rspec
 

@@ -21,7 +21,7 @@ jobs:
     docker: 
       - circleci/ruby:2.5.3
     steps:
-    - checkout
+      - checkout
       - run:
           name: Test Suite
           command: bundle exec rspec

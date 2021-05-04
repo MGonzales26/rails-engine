@@ -9,6 +9,7 @@ jobs:
       - image: circleci/postgres:13.2
         auth: 
           username: rails-engine
+          password: <%= ENV['RAILS-ENGINE_DATABASE_PASSWORD'] %>
         environment:
           POSTGRES_USER: rails-engine
           POSTGRES_DB: rails_engine_test

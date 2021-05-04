@@ -6,7 +6,7 @@ jobs:
   build:
     docker:
       - image: circleci/ruby:2.5.3
-        environment:
+      - environment:
         BUNDLER_VERSION: 2.0.1
     steps:
       - checkout

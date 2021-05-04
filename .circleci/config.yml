@@ -8,8 +8,8 @@ jobs:
       - image: circleci/ruby:2.5.3
       - image: circleci/postgres:13.2
         auth:
-        username: rails-engine
-        password: password
+          username: rails-engine
+          password: password
     steps:
       - checkout
       - run:

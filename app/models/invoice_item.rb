@@ -6,7 +6,9 @@ class InvoiceItem < ApplicationRecord
       joins(invoice: :transactions)
       .where('transactions.result = ?', 'success')
       .where('invoices.status = ?', 'shipped')
-      .where('invoices.created_at between ? and ?', Date.parse(start_date).beginning_of_day, Date.parse(end_date).end_of_day)
+      .where('invoices.created_at between ? and ?', 
+       Date.parse(start_date).beginning_of_day, 
+       Date.parse(end_date).end_of_day)
       .revenue
   end
 

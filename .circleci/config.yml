@@ -7,6 +7,9 @@ jobs:
     docker:
       - image: circleci/ruby:2.5.3
       - image: circleci/postgres:13.2
+        auth:
+          username: mydockerhub-user
+          password: $DOCKERHUB_PASSWORD 
     steps:
       - checkout
       - run:

@@ -7,10 +7,9 @@ jobs:
     docker:
       - image: circleci/ruby:2.5.3
       - image: circleci/postgres:13.2
-        environment:
-          POSTGRES_USER: rails-engine
-          POSTGRES_DB: rails_engine_test
-          POSTGRES_HOST_AUTH_METHOD: trust
+        auth:
+        username: rails-engine
+        password: password
     steps:
       - checkout
       - run:

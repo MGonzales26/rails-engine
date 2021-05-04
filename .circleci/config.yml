@@ -10,6 +10,9 @@ jobs:
         auth:
           username: rails-engine
           password: password
+        environment:
+          POSTGRES_USER: rails-engine
+          POSTGRES_DB: rails-engine_test
     steps:
       - checkout
       - run:

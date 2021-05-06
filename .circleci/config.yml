@@ -12,7 +12,7 @@ jobs:
       - image: circleci/postgres:13.2
         environment:
           POSTGRES_USER: rails-engine
-          POSTGRES_DB: rails-engine_test
+          POSTGRES_DB: rails-engine_development
           POSTGRES_HOST_AUTH_METHOD: trust
     steps:
       - checkout
@@ -41,7 +41,7 @@ jobs:
       - run:
           name: Database Setup
           command: |
-            bundle exec rake db:{create,migrate,seed}
+            bundle exec rails db:drop db:create
   test:
     docker: 
       - image: circleci/ruby:2.5.3

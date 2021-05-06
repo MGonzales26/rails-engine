@@ -24,6 +24,11 @@ jobs:
             echo 'export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"' >> $BASH_ENV
             echo 'export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"' >> $BASH_ENV
       - run:
+          name: Install Custom Formulae
+          command: |
+            export PATH="$HOME/.linuxbrew/bin:$PATH"
+            brew install ./easel.rb
+      - run:
           name: Configure Bundler
           command: |
             gem update --system
@@ -36,7 +41,6 @@ jobs:
           command: |
             brew doctor
             brew update
-            brew link libyaml
             brew install postgres
       - run:
           name: Database Setup

@@ -22,7 +22,13 @@ jobs:
       - run:
           name: Bundle
           command: bundle install
-      - run: brew install postgresql
+      - run:
+          name: Install homebrew dependencies
+          command: |
+            brew update
+            HOMEBREW_NO_AUTO_UPDATE=1 brew bundle
+            echo 'export PATH="/usr/local/var?/postgresql@11/bin:$PATH"' >> ~/.bash_profile
+            source ~/.bash_profile
       - run: brew services start postgresql
       - run: psql postgres
       - run:

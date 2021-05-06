@@ -14,7 +14,6 @@ jobs:
           POSTGRES_USER: rails-engine
           POSTGRES_DB: rails-engine_development
           POSTGRES_HOST_AUTH_METHOD: trust
-      - run: bundle exec rails db:drop db:create
     steps:
       - checkout
       - run:
@@ -39,15 +38,21 @@ jobs:
           command: |
             brew update
             brew install postgres
-      # - run:
-      #     name: Database Setup
-      #     command: |
-      #       bundle exec rails db:drop db:create
   test:
+    pre:
+    - sudo bash -c "echo \"listen_addresses = '*'\" >>
+      /etc/postgresql/9.4/main/postgresql.conf"
+    - sudo bash -c "echo \"host all all 0.0.0.0/0 trust\" >>
+      /etc/postgresql/9.4/main/pg_hba.conf"
+    - sudo /etc/init.d/postgresql restart
     docker: 
       - image: circleci/ruby:2.5.3
     steps:
       - checkout
+      - run:
+          name: Database Setup
+          command: |
+            bundle exec rails db:drop db:create
       - run:
           name: Test Suite
           command: bundle exec rspec

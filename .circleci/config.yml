@@ -41,6 +41,7 @@ jobs:
       - run:
           name: Database Setup
           command: |
+            brew services start postgresql
             bundle exec rake db:{create,migrate,seed}
   test:
     docker: 

@@ -9,7 +9,7 @@ jobs:
     working_directory: ~/rails-engine
     docker:
       - image: circleci/ruby:2.5.3
-      - image: circleci/postgres:9.6
+      - image: circleci/postgres:13.2
         environment:
           POSTGRES_USER: rails-engine
           POSTGRES_DB: rails-engine_test
@@ -41,7 +41,6 @@ jobs:
       - run:
           name: Database Setup
           command: |
-            brew start postgresql
             bundle exec rake db:{create,migrate,seed}
   test:
     docker: 

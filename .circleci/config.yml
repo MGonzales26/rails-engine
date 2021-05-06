@@ -41,6 +41,7 @@ jobs:
       - run:
           name: Database Setup
           command: |
+            sudo service postgresql start
             bundle exec rails db:drop db:create
   test:
     docker: 

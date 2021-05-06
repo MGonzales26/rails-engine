@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@1.1.3 
+  ruby: circleci/ruby@1.1.3
+  homebrew: izumin5210/homebrew@0.1.3
 
 jobs:
   build:
@@ -23,11 +24,6 @@ jobs:
             echo 'export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/:$PATH"' >> $BASH_ENV
             echo 'export MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"' >> $BASH_ENV
             echo 'export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"' >> $BASH_ENV
-      - run:
-          name: Install Custom Formulae
-          command: |
-            export PATH="$HOME/.linuxbrew/bin:$PATH"
-            brew install ./easel.rb
       - run:
           name: Configure Bundler
           command: |

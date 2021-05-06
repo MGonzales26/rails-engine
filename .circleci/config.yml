@@ -39,14 +39,14 @@ jobs:
             brew update
             brew install postgres
   test:
-    pre:
-    - sudo bash -c "echo \"listen_addresses = '*'\" >>
-      /etc/postgresql/9.4/main/postgresql.conf"
-    - sudo bash -c "echo \"host all all 0.0.0.0/0 trust\" >>
-      /etc/postgresql/9.4/main/pg_hba.conf"
-    - sudo /etc/init.d/postgresql restart
     docker: 
-      - image: circleci/ruby:2.5.3
+      pre:
+        - sudo bash -c "echo \"listen_addresses = '*'\" >>
+          /etc/postgresql/9.4/main/postgresql.conf"
+        - sudo bash -c "echo \"host all all 0.0.0.0/0 trust\" >>
+          /etc/postgresql/9.4/main/pg_hba.conf"
+        - sudo /etc/init.d/postgresql restart
+    - image: circleci/ruby:2.5.3
     steps:
       - checkout
       - run:

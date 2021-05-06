@@ -35,7 +35,6 @@ jobs:
       - run: 
           name: Install PostgreSQL
           command: |
-            brew doctor
             brew update
             brew install postgres
       - run:

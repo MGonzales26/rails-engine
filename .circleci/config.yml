@@ -22,7 +22,6 @@ jobs:
       - run:
           name: Bundle
           command: bundle install
-      - run: sudo service postgresql start
       - run: brew services start postgresql
       - run: psql postgres
       - run:

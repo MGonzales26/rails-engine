@@ -36,6 +36,7 @@ jobs:
           command: |
             brew doctor
             brew update
+            rm -rf /usr/local/lib/pkgconfig/ruby-2.5.pc
             brew install postgres
       - run:
           name: Database Setup

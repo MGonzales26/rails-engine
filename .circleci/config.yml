@@ -14,6 +14,7 @@ jobs:
           POSTGRES_USER: rails-engine
           POSTGRES_DB: rails-engine_development
           POSTGRES_HOST_AUTH_METHOD: trust
+      - run: bundle exec rails db:drop db:create
     steps:
       - checkout
       - run:
@@ -38,11 +39,10 @@ jobs:
           command: |
             brew update
             brew install postgres
-      - run:
-          name: Database Setup
-          command: |
-            sudo service postgresql start
-            bundle exec rails db:drop db:create
+      # - run:
+      #     name: Database Setup
+      #     command: |
+      #       bundle exec rails db:drop db:create
   test:
     docker: 
       - image: circleci/ruby:2.5.3

@@ -40,7 +40,7 @@ jobs:
             brew install postgres
       - run:
           name: Database Setup
-          command: rails db:{create,setup,migrate,seed}
+          command: rake db:{create,setup,migrate,seed}
   test:
     docker: 
       - image: circleci/ruby:2.5.3

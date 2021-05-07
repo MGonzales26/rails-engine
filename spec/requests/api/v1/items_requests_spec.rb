@@ -248,6 +248,7 @@ RSpec.describe "Items API" do
       it "creates a new item" do
         merchant_1 = create(:merchant)
         #it needs a hash with name, description, unit_price, merchant_id
+        
         params = {
                   :name => 'widget',
                   :description => 'does the thing',

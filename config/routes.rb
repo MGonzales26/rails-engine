@@ -15,6 +15,8 @@ Rails.application.routes.draw do
 
       get 'revenue', to: 'revenue#date_range_revenue'
       get 'revenue/weekly', to: 'revenue#weekly_revenue'
+      get 'revenue/daily', to: 'revenue#daily_revenue'
+
     end
   end
 end

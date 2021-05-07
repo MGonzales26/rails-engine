@@ -1,0 +1,22 @@
+language: ruby
+rbenv:
+- 2.5.3
+addons:
+  postgresql: 9.6
+before_install:
+- gem install bundler:2.1.4
+- nvm install --lts
+script:
+- bundle exec rails db:{create,migrate} RAILS_ENV=test
+- bundle exec rspec
+deploy:
+  provider: heroku
+  api_key:
+    secure: ZQjszcMSYDq3w6YO1MLrYrRXQzDjtLewwQqEl/abVJGyjAljVqKEHvykXwf7k5sE/PiOxHuSs0VhHE+BRFZXaYwb2G6awg7naHYPmkheqpURFCdLW0NbCHAAhjjFZf+Y/zTSAZn/3DcAGK7kmh3BO8Dez+j936KHACXEHovOJtxCLClBrxXbVrjSYaqgdxaZ2SO85NMViiAjhSAb+kdusc3zDuAz5wV1idkHqg1RQjrJqVzvPaui9T4gW12eWsjYhUSC32OvUE0nA7w6/rWtTVnoBGilUdMx7TZWw7Thv3aFF8/IOPowA2mg+ObC9vmI4hISUfAkWCSy+SCoc4iPRALtbBje1cjemuXuekUl58FwL3VWlwWnKYuhbXBeHSFsDW/AH2VROjXJNtQcahDnshFqLIpctCRHimZKEEQZ6Z3GpqTcP0JHz7QvmvKlTnwMvX1Bx3qkduBLGtMAGutiWpTiIO3EgfYdEvIv1h4mbSuapN4GBhammiRwoIvzCRHNCUMDaRiB15kTm9jqvJPnxioBx2HQP/8gkhRV38lYD/0Az3YjaGZeQKJz4V8fpByR8/XMR8Um7VXd586J9HrWpLNEPxsN7jbSXwATDTeQvmHvH8FQtkw9LNDT63nRJIG9YUu7jVPPwv54Y/OhDKHDMwDmC4zII6S0BR1dmSaRtDE=
+  app: secure-gorge-18886
+  run: rails db:migrate
+env:
+  global:
+    secure: OAvTI6k2mfczc5RwRVAAQJnxCGOR1C3iPk7GYzWsnSBxGSJZkBUHPL64yn5P4oAefTaJ74x2YNaMmy04/yLB5XADTfIcr9QHcBtCQE18CbqPNRZolUCy8HseT4SN/PCgUwlM6/i+iUjl/vaUx4nldDpTYTmsR8G7d9xXTuvZNIT8aFoGaTyc/c6NpOYEbN/1pSCxE5DKUNjgdsPzUBkIfkHmR7THDADUCFfD7Zb28/jboeNgdU+AlN5vHDJ1tsrC1TfvZZ4lvAYaX/ZuiIv1tsZLRi/UJNkgs/40KxTrz6IBjd43xpjezISPEqWsXKZcSHIFbyDHkWFxzdPf0dTO2JYq5lyqXO7qShtt9vOQBoWb4SUjyV/PNMZA8FTP0uKtVywfPJTFYIRcFmrPLBuDKq4zSWmo8pqf1KYoPXJrVPH2U0TOmoBluVy7e3Gq3ZjouFkrTSv0KTqRNJG3KoYvQsgNnIe63Adnztt1N0Xzy0UEt2Z60ynT52zperRwscHIz07AiW2K2dhGJpCoA+VzdEkC+1m7Vuo6by/YR0IFMV13t/vF+G4VK22Ohq2LNGiZk+g8BMVLHAi2GM3lfvSxqQji2sSSaNPPfxMujF4MIuc1F9YztEKnU8zJiDep8cV/K043JmzQfSobATjmrG2uB88WupbpXc/n1H6j0Dmd2R0=
+
+# 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 rail-engine:github token
